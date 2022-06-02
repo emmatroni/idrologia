@@ -1,0 +1,129 @@
+@S,Parameter
+ round,0
+ step,0
+ step_params,
+ calibration_start,Wed Jan 01 00:00:00 CET 2003
+ luca_name,richardsCalib
+
+@P,bufferParameter_thetaS1,0.4
+
+@P,bufferParameter_thetaR1,0.01
+
+@P,bufferParameter_par1SWRC1,1.21
+
+@P,bufferParameter_par2SWRC1,2.1
+
+@P,bufferParameter_par3SWRC1,0.0
+
+@P,bufferParameter_par4SWRC1,0.0
+
+@P,bufferParameter_par5SWRC1,0.0
+
+@P,bufferParameter_alphaSpecificStorage1,0.0
+
+@P,bufferParameter_betaSpecificStorage1,0.0
+
+@P,bufferParameter_ks1,0.000001222400
+
+@P,bufferParameter_thetaS2,0.35
+
+@P,bufferParameter_thetaR2,0.095
+
+@P,bufferParameter_par1SWRC2,1.31
+
+@P,bufferParameter_par2SWRC2,1.9
+
+@P,bufferParameter_par3SWRC2,0.0
+
+@P,bufferParameter_par4SWRC2,0.0
+
+@P,bufferParameter_par5SWRC2,0.0
+
+@P,bufferParameter_alphaSpecificStorage2,0.0
+
+@P,bufferParameter_betaSpecificStorage2,0.0
+
+@P,bufferParameter_ks2,3.222400E-7
+
+@P,readNetCDF_richardsGridFilename,C:\Users\Niccolo\OMS\OMS_Project_WHETGEO1D_SummerSchool2021//data/Grid_NetCDF/ex07_calibration_grid.nc
+
+@P,solver_typeClosureEquation,"{Water Depth,Van Genuchten}"
+
+@P,solver_typeEquationState,"{Water Depth,Van Genuchten}"
+
+@P,solver_typeUHCModel,"{null,Mualem Van Genuchten}"
+
+@P,solver_typeUHCTemperatureModel,notemperature
+
+@P,solver_interfaceHydraulicConductivityModel,max
+
+@P,solver_topBCType,Top Coupled
+
+@P,solver_bottomBCType,Bottom free drainage
+
+@P,solver_stationID,135
+
+@P,solver_newtonTolerance,0.00000000001
+
+@P,solver_nestedNewton,1
+
+@P,solver_picardIteration,1
+
+@P,solver_tTimeStep,3600
+
+@P,solver_timeDelta,1800
+
+@P,reader_data_topBC_file,C:\Users\Niccolo\OMS\OMS_Project_WHETGEO1D_SummerSchool2021//data/Timeseries/ex07_calibration_rainfall.csv
+
+@P,reader_data_topBC_idfield,ID
+
+@P,reader_data_topBC_tStart,2003-01-01 00:00
+
+@P,reader_data_topBC_tEnd,2003-03-01 00:00
+
+@P,reader_data_topBC_tTimestep,60
+
+@P,reader_data_topBC_fileNovalue,-9999
+
+@P,reader_data_bottomBC_file,C:\Users\Niccolo\OMS\OMS_Project_WHETGEO1D_SummerSchool2021//data/Timeseries/ex07_calibration_free_drainage.csv
+
+@P,reader_data_bottomBC_idfield,ID
+
+@P,reader_data_bottomBC_tStart,2003-01-01 00:00
+
+@P,reader_data_bottomBC_tEnd,2003-03-01 00:00
+
+@P,reader_data_bottomBC_tTimestep,60
+
+@P,reader_data_bottomBC_fileNovalue,-9999
+
+@P,reader_data_save_dates_file,C:\Users\Niccolo\OMS\OMS_Project_WHETGEO1D_SummerSchool2021//data/Timeseries/ex07_calibration_save_dates.csv
+
+@P,reader_data_save_dates_idfield,ID
+
+@P,reader_data_save_dates_tStart,2003-01-01 00:00
+
+@P,reader_data_save_dates_tEnd,2003-03-01 00:00
+
+@P,reader_data_save_dates_tTimestep,60
+
+@P,reader_data_save_dates_fileNovalue,-9999
+
+@P,writerCalibrationPointsPsi_file,C:\Users\Niccolo\OMS\OMS_Project_WHETGEO1D_SummerSchool2021//output/ex07_calibration_observed_psi.csv
+
+@P,writerCalibrationPointsPsi_tStart,2003-01-01 00:00
+
+@P,writerCalibrationPointsPsi_tTimestep,60
+
+@P,writerCalibrationPointsPsi_fileNovalue,-9999
+
+@P,writerCalibrationPointsTheta_file,C:\Users\Niccolo\OMS\OMS_Project_WHETGEO1D_SummerSchool2021//output/ex07_calibration_observed_theta.csv
+
+@P,writerCalibrationPointsTheta_tStart,2003-01-01 00:00
+
+@P,writerCalibrationPointsTheta_tTimestep,60
+
+@P,writerCalibrationPointsTheta_fileNovalue,-9999
+
+@P,buffer_writeFrequency,10000
+

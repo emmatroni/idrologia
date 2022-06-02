@@ -1,0 +1,5 @@
+WHETGEO1D_00.ipynb è solo per delle prove da cancellare
+
+*-Copy1.ipynb sono i vecchi notebook che si leggono i .py
+
+*.py sono stati messi dentro il pacchetto geoframepy quindi possono essere cancellati.

@@ -1,0 +1,311 @@
+/*
+ * WHETGEO-1D ex07 calibration
+ * 
+ * Author: Niccolo` Tubini and Riccardo Rigon
+ */
+import static oms3.SimBuilder.instance as OMS3
+import static oms3.SimBuilder.*
+def home = oms_prj
+
+
+def richardsGridFileName = "$oms_prj//data/Grid_NetCDF/ex07_calibration_grid.nc"
+
+def typeClosureEquation = "{Water Depth,Van Genuchten}"
+
+def typeEquationState = "{Water Depth,Van Genuchten}"
+
+def typeUHCModel = "{null,Mualem Van Genuchten}"
+
+def typeUHCTemperatureModel = "notemperature"
+
+def interfaceHydraulicConductivityModel = "max"
+
+def topBCType = "Top Coupled"
+
+def bottomBCType = "Bottom free drainage"
+
+def stationID = "135"
+
+def startDate= "2003-01-01 00:00"
+
+def endDate="2003-03-01 00:00"
+
+def tTimestep = 60
+
+def topBCFileName = "$oms_prj//data/Timeseries/ex07_calibration_rainfall.csv"
+
+def bottomBCFileName = "$oms_prj//data/Timeseries/ex07_calibration_free_drainage.csv"
+
+def saveDatesFileName = "$oms_prj//data/Timeseries/ex07_calibration_save_dates.csv"
+
+def outputFileName = "$oms_prj//output/ex07.nc"
+
+def outputSimulatedPsi = "$oms_prj//output/ex07_simulated_psi.csv"
+
+def outputSimulatedTheta = "$oms_prj//output/ex07_simulated_theta.csv"
+
+
+def writeFrequency = 10000
+
+
+
+
+//solver = OMS3.sim(name: "Integrate PDE", {
+
+luca = OMS3.luca_run(name:"richardsCalib", {
+	
+	resource "$oms_prj/dist/*.jar"
+    outputstrategy(dir: "$oms_prj/output", scheme:NUMBERED)
+
+	model(while : "reader_data_topBC.doProcess"){
+
+		components {
+			
+			// reads of the grid.nc file
+			"readNetCDF" 					"it.geoframe.blogpsot.netcdf.monodimensionalproblemtimedependent.ReadNetCDFRichardsGrid1D"
+			
+			// solve Richards' equation
+			"solver" 						"it.geoframe.blogspot.whetgeo1d.richardssolver.RichardsSolver1DMain"
+			
+			// time-series reader
+			"reader_data_topBC"         	"org.hortonmachine.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+			"reader_data_bottomBC"      	"org.hortonmachine.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+			"reader_data_save_dates"    	"org.hortonmachine.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+			
+			"writerCalibrationPointsPsi"  	"org.hortonmachine.gears.io.timedependent.OmsTimeSeriesIteratorWriter"
+			"writerCalibrationPointsTheta"  "org.hortonmachine.gears.io.timedependent.OmsTimeSeriesIteratorWriter"
+			
+			// this component stores solver's output during the simulation
+			"buffer" 						"it.geoframe.blogspot.buffer.buffertowriter.RichardsBuffer1D"
+			"bufferCalibration" 			"it.geoframe.blogspot.buffer.buffercalibrationpoints.BufferCalibrationRichards1D"
+			"bufferParameter"  				"it.geoframe.blogspot.buffer.bufferparameter.BufferParameterRichards1D"
+			
+			
+			// output writer in a NetCDF format
+			//"writeNetCDF" "it.geoframe.blogpsot.netcdf.monodimensionalproblemtimedependent.WriteNetCDFRichards1DDouble"
+		
+		}
+		
+		parameter {
+
+	
+			"bufferParameter.thetaS1" 0.4
+			"bufferParameter.thetaR1" 0.01
+			"bufferParameter.par1SWRC1" 1.21
+			"bufferParameter.par2SWRC1" 2.1
+			"bufferParameter.par3SWRC1" 0.0
+			"bufferParameter.par4SWRC1" 0.0
+			"bufferParameter.par5SWRC1" 0.0
+			"bufferParameter.alphaSpecificStorage1" 0.0
+			"bufferParameter.betaSpecificStorage1"  0.0
+			"bufferParameter.ks1" 1.222400e-06 
+			
+			"bufferParameter.thetaS2" 0.35
+			"bufferParameter.thetaR2" 0.095
+			"bufferParameter.par1SWRC2" 1.31
+			"bufferParameter.par2SWRC2" 1.9
+			"bufferParameter.par3SWRC2" 0.0
+			"bufferParameter.par4SWRC2" 0.0
+			"bufferParameter.par5SWRC2" 0.0
+			"bufferParameter.alphaSpecificStorage2" 0.0
+			"bufferParameter.betaSpecificStorage2"  0.0
+			"bufferParameter.ks2" 3.222400e-07 
+			
+			
+			// File path of grid.nc file, the file created with RichardsMeshGen.ipynb	
+			"readNetCDF.richardsGridFilename" "${richardsGridFileName}"
+
+
+			"solver.typeClosureEquation" "${typeClosureEquation}"
+			
+
+			"solver.typeEquationState" "${typeEquationState}"
+
+
+			"solver.typeUHCModel" "${typeUHCModel}"
+
+
+			"solver.typeUHCTemperatureModel" "${typeUHCTemperatureModel}"
+
+
+			"solver.interfaceHydraulicConductivityModel" "${interfaceHydraulicConductivityModel}"
+
+
+			"solver.topBCType"  "${topBCType}";
+
+
+			"solver.bottomBCType"  "${bottomBCType}"
+
+
+			"solver.stationID"  "${stationID}"
+
+
+			"solver.newtonTolerance" "0.00000000001"
+
+
+			"solver.nestedNewton" "1"
+			
+			
+			"solver.picardIteration" "1"
+
+
+			"solver.tTimeStep" tTimestep*60
+
+			// time step [s] used to integrate the equation,
+			// this is the Delta t used in the numerical scheme
+			// timeDelta <= tTimestep
+			"solver.timeDelta" "1800"
+
+			// parameters reader data input top boundary condition
+			"reader_data_topBC.file"             "${topBCFileName}"
+			"reader_data_topBC.idfield"          "ID"  
+			"reader_data_topBC.tStart"           "${startDate}"
+			"reader_data_topBC.tEnd"             "${endDate}"
+			"reader_data_topBC.tTimestep"        "${tTimestep}"
+			"reader_data_topBC.fileNovalue"      "-9999"
+
+			// parameters reader data input bottom boundary condition
+			"reader_data_bottomBC.file"             "${bottomBCFileName}"
+			"reader_data_bottomBC.idfield"          "ID"  
+			"reader_data_bottomBC.tStart"           "${startDate}"
+			"reader_data_bottomBC.tEnd"             "${endDate}"
+			"reader_data_bottomBC.tTimestep"        "${tTimestep}"
+			"reader_data_bottomBC.fileNovalue"      "-9999"
+			
+			// parameters reader data save dates
+			"reader_data_save_dates.file"             "${saveDatesFileName}"
+			"reader_data_save_dates.idfield"          "ID"  
+			"reader_data_save_dates.tStart"           "${startDate}"
+			"reader_data_save_dates.tEnd"             "${endDate}"
+			"reader_data_save_dates.tTimestep"        "${tTimestep}"
+			"reader_data_save_dates.fileNovalue"      "-9999"
+			
+			
+			// parameters writer 
+			"writerCalibrationPointsPsi.file"             "${outputSimulatedPsi}"
+			"writerCalibrationPointsPsi.tStart"           "${startDate}"
+			"writerCalibrationPointsPsi.tTimestep"        "${tTimestep}"
+			"writerCalibrationPointsPsi.fileNovalue"      "-9999"
+
+			"writerCalibrationPointsTheta.file"             "${outputSimulatedTheta}"
+			"writerCalibrationPointsTheta.tStart"           "${startDate}"
+			"writerCalibrationPointsTheta.tTimestep"        "${tTimestep}"
+			"writerCalibrationPointsTheta.fileNovalue"      "-9999"
+						
+			
+			"buffer.writeFrequency"                   "${writeFrequency}"
+
+			// folder path for the output files
+			//"writeNetCDF.fileName" "$oms_prj//output/cancella.nc"
+			// here you can enter a string to describe your simulation
+			//"writeNetCDF.briefDescritpion"          "Calibration with LUCA."
+			//"writeNetCDF.writeFrequency"            "${writeFrequency}"
+			//"writeNetCDF.timeUnits"                 "Minutes since 01/01/1970 00:00:00 UTC"
+			//"writeNetCDF.timeZone"                  "UTC"
+			//"writeNetCDF.fileSizeMax"               "10000"
+			//"writeNetCDF.outVariables"              "{}"
+			//"writeNetCDF.pathGrid"                  "${richardsGridFileName}"
+			//"writeNetCDF.pathTopBC"                 "${topBCFileName}"
+			//"writeNetCDF.pathBottomBC"              "${bottomBCFileName}"
+			//"writeNetCDF.topBC"                     "${topBCType}"
+			//"writeNetCDF.bottomBC"                  "${bottomBCType}"
+			//"writeNetCDF.swrcModel"                 "VG"
+			//"writeNetCDF.soilHydraulicConductivityModel"   "VG"
+			//"writeNetCDF.interfaceConductivityModel"       "Max"
+			
+		}
+
+		connect{
+
+
+			"readNetCDF.z"                      "solver.z"
+			"readNetCDF.spaceDelta"             "solver.spaceDeltaZ"
+			"readNetCDF.psiIC"                  "solver.psiIC"
+			"readNetCDF.temperature"            "solver.temperature"
+			"readNetCDF.controlVolume"          "solver.controlVolume"
+
+			"bufferParameter.ks"                     "solver.ks"
+			"bufferParameter.thetaS"            	 "solver.thetaS"
+			"bufferParameter.thetaR"                 "solver.thetaR"
+			"bufferParameter.par1SWRC"               "solver.par1SWRC"
+			"bufferParameter.par2SWRC"               "solver.par2SWRC"
+			"bufferParameter.par3SWRC"               "solver.par3SWRC"
+			"bufferParameter.par4SWRC"               "solver.par4SWRC"
+			"bufferParameter.par5SWRC"               "solver.par5SWRC"
+			"bufferParameter.alphaSpecificStorage"   "solver.alphaSpecificStorage"
+			"bufferParameter.betaSpecificStorage"    "solver.betaSpecificStorage"
+
+
+			"readNetCDF.equationStateID"        "solver.inEquationStateID"
+			"readNetCDF.parameterID"            "solver.inParameterID"
+
+			"reader_data_topBC.tCurrent"        "solver.inCurrentDate"
+			"reader_data_topBC.outData"         "solver.inTopBC"
+			"reader_data_bottomBC.outData"      "solver.inBottomBC"
+			"reader_data_save_dates.outData"    "solver.inSaveDate"
+			
+			
+			
+			// input buffer
+			"solver.inCurrentDate"        "buffer.inputDate"
+			"solver.doProcessBuffer"      "buffer.doProcessBuffer"
+			"solver.outputToBuffer"       "buffer.inputVariable"
+			
+			"solver.outputToBuffer"       "bufferCalibration.inputVariable"
+
+			
+			// input writeNetCDF
+			//"reader_data_topBC.doProcess"        "writeNetCDF.doProcess"
+			
+			//"buffer.myVariable"                  "writeNetCDF.variables"
+			
+			"readNetCDF.controlVolumeIndex"      "bufferCalibration.controlVolumeIndex"  
+			
+			//"readNetCDF.eta"                     "writeNetCDF.spatialCoordinate"
+			//"readNetCDF.etaDual"                 "writeNetCDF.dualSpatialCoordinate"
+			//"readNetCDF.controlVolume"           "writeNetCDF.controlVolume"
+			//"readNetCDF.psiIC"                   "writeNetCDF.psiIC"
+			//"readNetCDF.temperature"             "writeNetCDF.temperature"
+			
+			"bufferCalibration.simulatedPsi"     "writerCalibrationPointsPsi.inData"
+			"bufferCalibration.simulatedTheta"   "writerCalibrationPointsTheta.inData"
+			
+			
+		}
+
+	}
+
+	rounds 1
+    
+    run_start          "2003-01-01 00:00" 
+    calibration_start  "2003-01-01 00:00" 
+    run_end            "2003-03-01 00:00" 
+    // step definitions
+    step {
+        parameter {
+                
+          "bufferParameter_thetaS1"        (lower:0.3, upper:0.45,calib_strategy:MEAN) 
+//        "bufferParameter_thetaR1"        (lower:0.055, upper:0.12,calib_strategy:MEAN) 
+//        "bufferParameter_par1SWRC1"      (lower:1.2, upper:2.5,calib_strategy:MEAN) 
+//        "bufferParameter_par2SWRC1"      (lower:1.4, upper:2.3,calib_strategy:MEAN) 
+//        "bufferParameter_ks1"            (lower:9.25e-08, upper:9.25e-06,calib_strategy:MEAN) 
+
+          "bufferParameter_thetaS2"        (lower:0.3, upper:0.45,calib_strategy:MEAN) 
+//        "bufferParameter_thetaR2"        (lower:0.055, upper:0.12,calib_strategy:MEAN) 
+//        "bufferParameter_par1SWRC2"      (lower:1.2, upper:2.5,calib_strategy:MEAN) 
+//        "bufferParameter_par2SWRC2"      (lower:1.4, upper:2.3,calib_strategy:MEAN) 
+//        "bufferParameter_ks2"            (lower:9.25e-08, upper:9.25e-06,calib_strategy:MEAN) 
+
+
+        }
+             objfunc(method:RMSE, timestep:RAW,invalidDataValue:-9999) {
+            sim(file:"${outputSimulatedTheta}", table:"table", column:"value_73","value_39")
+            obs(file:"${oms_prj}//data//Timeseries//ex07_calibration_observed_theta.csv", table:"table", column:"value_0")
+        }
+
+		max_exec 1
+    }
+	
+	}
+
+)

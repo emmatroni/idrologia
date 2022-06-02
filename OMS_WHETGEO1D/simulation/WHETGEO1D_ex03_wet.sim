@@ -1,0 +1,216 @@
+/*
+ * WHETGEO-1D ex03
+ * 
+ * Author: Niccolo` Tubini and Riccardo Rigon
+ */
+import static oms3.SimBuilder.instance as OMS3
+import static oms3.SimBuilder.*
+def home = oms_prj
+
+
+
+def richardsGridFileName = "$oms_prj//data/Grid_NetCDF/ex03_wet_GSS2021.nc"
+
+def typeClosureEquation = "{Water Depth,Van Genuchten}"
+
+def typeEquationState = "{Water Depth,Van Genuchten}"
+
+def typeUHCModel = "{null,Mualem Van Genuchten}"
+
+def typeUHCTemperatureModel = "notemperature"
+
+def interfaceHydraulicConductivityModel = "max"
+
+def topBCType = "Top Coupled"
+
+def bottomBCType = "Bottom Dirichlet"
+
+def maxPonding = 0.0
+
+def stationID = "0"
+
+def startDate= "2020-01-01 00:00"
+
+def endDate= "2020-01-01 23:55"
+
+def tTimestep = 5
+
+def topBCFileName = "$oms_prj//data/Timeseries/ex03_rainfall.csv"
+
+def bottomBCFileName = "$oms_prj//data/Timeseries/ex03_dirichlet_wet.csv"
+
+def saveDatesFileName = "$oms_prj//data/Timeseries/ex03_save_dates.csv"
+
+def outputFileName = "$oms_prj//output/ex03_wet.nc"
+
+
+def writeFrequency = 10000
+
+
+solver = OMS3.sim(name: "Integrate PDE", {
+
+resource "$oms_prj/dist"
+
+	model(while : "reader_data_topBC.doProcess"  ){
+
+		components {
+			
+			// reads of the grid.nc file
+			"readNetCDF" "it.geoframe.blogpsot.netcdf.monodimensionalproblemtimedependent.ReadNetCDFRichardsGrid1D"
+			
+			// solve Richards' equation
+			"solver" "it.geoframe.blogspot.whetgeo1d.richardssolver.RichardsSolver1DMain"
+			
+			// time-series reader
+			"reader_data_topBC"         "org.hortonmachine.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+			"reader_data_bottomBC"      "org.hortonmachine.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+			"reader_data_save_dates"    "org.hortonmachine.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+			
+			// this component stores solver's output during the simulation
+			"buffer" "it.geoframe.blogspot.buffer.buffertowriter.RichardsBuffer1D"
+			
+			// output writer in a NetCDF format
+			"writeNetCDF" "it.geoframe.blogpsot.netcdf.monodimensionalproblemtimedependent.WriteNetCDFRichards1DDouble"
+		
+		}
+		
+		parameter {
+
+			"readNetCDF.richardsGridFilename" "${richardsGridFileName}"
+
+
+			"solver.typeClosureEquation" "${typeClosureEquation}"
+			
+
+			"solver.typeEquationState" "${typeEquationState}"
+
+
+			"solver.typeUHCModel" "${typeUHCModel}"
+
+
+			"solver.typeUHCTemperatureModel" "${typeUHCTemperatureModel}"
+
+            
+			"solver.interfaceHydraulicConductivityModel" "${interfaceHydraulicConductivityModel}"
+						
+
+			"solver.topBCType"  "${topBCType}"
+
+            
+			"solver.bottomBCType"  "${bottomBCType}"
+			
+			"solver.maxPonding" "${maxPonding}"
+
+            
+			"solver.stationID"  "${stationID}"
+			
+
+			"solver.newtonTolerance" "10e-12"
+
+
+			"solver.nestedNewton" "1"
+			
+			"solver.picardIteration" "1"
+
+
+			"solver.tTimeStep" tTimestep*60
+
+
+			"solver.timeDelta" tTimestep*60
+
+			"reader_data_topBC.file"             "${topBCFileName}"
+			"reader_data_topBC.idfield"          "ID"  
+			"reader_data_topBC.tStart"           "${startDate}"
+			"reader_data_topBC.tEnd"             "${endDate}"
+			"reader_data_topBC.tTimestep"        "${tTimestep}"
+			"reader_data_topBC.fileNovalue"      "-9999"
+
+			"reader_data_bottomBC.file"             "${bottomBCFileName}"
+			"reader_data_bottomBC.idfield"          "ID"  
+			"reader_data_bottomBC.tStart"           "${startDate}"
+			"reader_data_bottomBC.tEnd"             "${endDate}"
+			"reader_data_bottomBC.tTimestep"        "${tTimestep}"
+			"reader_data_bottomBC.fileNovalue"      "-9999"
+			
+			"reader_data_save_dates.file"             "${saveDatesFileName}"
+			"reader_data_save_dates.idfield"          "ID"  
+			"reader_data_save_dates.tStart"           "${startDate}"
+			"reader_data_save_dates.tEnd"             "${endDate}"
+			"reader_data_save_dates.tTimestep"        "${tTimestep}"
+			"reader_data_save_dates.fileNovalue"      "-9999"
+			
+			
+			"buffer.writeFrequency"                   "${writeFrequency}"
+
+			// folder path for the output files
+			"writeNetCDF.fileName" "${outputFileName}"
+			// here you can enter a string to describe your simulation
+			"writeNetCDF.briefDescritpion"               "WHETGEO-1D ex03 wet initial condition."
+			"writeNetCDF.writeFrequency"                 "${writeFrequency}"
+			"writeNetCDF.timeUnits"                      "Minutes since 01/01/1970 00:00:00 UTC"
+			"writeNetCDF.timeZone"                       "UTC"
+			"writeNetCDF.fileSizeMax"                    "10000"
+			"writeNetCDF.outVariables"                   "{darcyVelocity}"
+			"writeNetCDF.pathGrid"		                 "${richardsGridFileName}"
+			"writeNetCDF.pathTopBC"		                 "${topBCFileName}"
+			"writeNetCDF.pathBottomBC"	                 "${bottomBCFileName}"
+			"writeNetCDF.topBC"		                     "${topBCType}"
+			"writeNetCDF.bottomBC"	                     "${bottomBCType}"
+			"writeNetCDF.swrcModel"                      "${typeClosureEquation}"
+			"writeNetCDF.soilHydraulicConductivityModel" "${typeUHCModel}"
+			"writeNetCDF.interfaceConductivityModel"     "${interfaceHydraulicConductivityModel}"
+			
+		}
+
+		connect{
+
+
+			"readNetCDF.z"                      "solver.z"
+			"readNetCDF.spaceDelta"             "solver.spaceDeltaZ"
+			"readNetCDF.psiIC"                  "solver.psiIC"
+			"readNetCDF.temperature"            "solver.temperature"
+			"readNetCDF.controlVolume"          "solver.controlVolume"
+			"readNetCDF.Ks"                     "solver.ks"
+			"readNetCDF.thetaS"                 "solver.thetaS"
+			"readNetCDF.thetaR"                 "solver.thetaR"
+			"readNetCDF.par1SWRC"               "solver.par1SWRC"
+			"readNetCDF.par2SWRC"               "solver.par2SWRC"
+			"readNetCDF.par3SWRC"               "solver.par3SWRC"
+			"readNetCDF.par4SWRC"               "solver.par4SWRC"
+			"readNetCDF.par5SWRC"               "solver.par5SWRC"
+			"readNetCDF.alphaSS"                "solver.alphaSpecificStorage"
+			"readNetCDF.betaSS"                 "solver.betaSpecificStorage"
+			"readNetCDF.equationStateID"        "solver.inEquationStateID"
+			"readNetCDF.parameterID"            "solver.inParameterID"
+
+			"reader_data_topBC.tCurrent"        "solver.inCurrentDate"
+			"reader_data_topBC.outData"         "solver.inTopBC"
+			"reader_data_bottomBC.outData"      "solver.inBottomBC"
+			"reader_data_save_dates.outData"    "solver.inSaveDate"
+			
+			
+			
+			// input buffer
+			"solver.inCurrentDate"        "buffer.inputDate"
+			"solver.doProcessBuffer"      "buffer.doProcessBuffer"
+			"solver.outputToBuffer"       "buffer.inputVariable"
+
+			
+			// input writeNetCDF
+			"reader_data_topBC.doProcess"        "writeNetCDF.doProcess"
+			
+			"buffer.myVariable"                  "writeNetCDF.variables"
+			
+			"readNetCDF.eta"                     "writeNetCDF.spatialCoordinate"
+			"readNetCDF.etaDual"                 "writeNetCDF.dualSpatialCoordinate"
+			"readNetCDF.controlVolume"           "writeNetCDF.controlVolume"
+			"readNetCDF.psiIC"                   "writeNetCDF.psiIC"
+			"readNetCDF.temperature"             "writeNetCDF.temperature"
+			
+			
+		}
+	}
+
+	}
+
+)

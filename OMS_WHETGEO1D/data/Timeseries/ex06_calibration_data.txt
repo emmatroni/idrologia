@@ -1,0 +1,11 @@
+ex06 calibration
+
+Available measuraments of water suction (ex06_calibration_observed_psi.csv)
+and of adimensional water content (ex06_calibration_observed_theta.csv) are 
+at four different depth
+
+ID	depth [m]
+0	-0.25
+1	-0.5
+2	-1.0
+3	-1.5

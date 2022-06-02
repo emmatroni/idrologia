@@ -1,0 +1,25 @@
+thetaS,thetaR,n,psiD,alphaSpecificStorage,betaSpecificStorage,Ks
+#1 Sand, from Hydrus-1D
+0.437,0.02,1.689,-0.0725,1e-8,4.4e-10,5.83333E-05
+#2 Loamy sand, from Hydrus-1D
+0.437,0.035,2.109,-0.0869,1e-8,4.4e-10,1.69722E-05
+#3 Sandy loam, from Hydrus-1D
+0.453,0.041,3.106,-0.146,1e-8,4.4e-10,7.19444E-06
+#4 Loam, from Hydrus-1D
+0.463,0.027,4.545,-0.111,1e-8,4.4e-10,3.66667E-06
+#5 Silt, from Hydrus-1D
+0.501,0.015,4.74,-0.207,1e-8,4.4e-10,1.88889E-06
+#6 Silt loam, from Hydrus-1D
+0.501,0.015,4.74,-0.207,1e-8,4.4e-10,1.88889E-06
+#7 Sandy clay loam, from Hydrus-1D
+0.398,0.068,4.0,-0.281,1e-8,4.4e-10,1.19444E-06
+#8 Clay loam, from Hydrus-1D
+0.366,0.075,5.155,-0.259,1e-8,4.4e-10,6.38889E-07
+#9 Silty clay loam, from Hydrus-1D
+0.471,0.04,6.622,-0.326,1e-8,4.4e-10,4.16667E-07
+#10 Sandy clay, from Hydrus-1D
+0.43,0.109,5.952,-0.291,1e-8,4.4e-10,3.33333E-07
+#11 Silty clay, from Hydrus-1D
+0.479,0.056,7.874,-0.342,1e-8,4.4e-10,2.5E-07
+#12 Clay, from Hydrus-1D
+0.475,0.09,7.633,-0.373,0.0,0.0,1.66667E-07

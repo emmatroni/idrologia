@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MaziaCaldaro" default="all" basedir=".">
+    <description>
+       Manages the project 'MaziaCaldaro'.
+       Created at Tue Sep 25 11:54:54 CEST 2018.
+    </description>
+    <import file=".oms/project.xml"/>
+</project>

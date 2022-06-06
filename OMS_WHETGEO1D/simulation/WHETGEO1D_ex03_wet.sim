@@ -9,7 +9,7 @@ def home = oms_prj
 
 
 
-def richardsGridFileName = "$oms_prj//data/Grid_NetCDF/ex03_wet_GSS2021.nc"
+def richardsGridFileName = "$oms_prj//data/Grid_NetCDF/Runoff_wet.nc"
 
 def typeClosureEquation = "{Water Depth,Van Genuchten}"
 
@@ -41,7 +41,7 @@ def bottomBCFileName = "$oms_prj//data/Timeseries/ex03_dirichlet_wet.csv"
 
 def saveDatesFileName = "$oms_prj//data/Timeseries/ex03_save_dates.csv"
 
-def outputFileName = "$oms_prj//output/ex03_wet.nc"
+def outputFileName = "$oms_prj//output/Runoff_wet.nc"
 
 
 def writeFrequency = 10000

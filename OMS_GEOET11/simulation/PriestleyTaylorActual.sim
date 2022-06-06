@@ -70,9 +70,9 @@ OMS3.sim {
 				"PTstressfactor.waterWiltingPoint"	0.15   //FAO Table 19 qWP- http://www.fao.org/3/X0490E/x0490e0c.htm#TopOfPage
 				//silt loam
 				"PTstressfactor.waterFieldCapacity"	0.29   //FAO Table 19 qFC
-				"PTstressfactor.depth"  		0.25 			//Table 22 Profondità ottenuta dalla FAO
-				"PTstressfactor.depletionFraction" 	0.7   //FAO Table 22 - http://www.fao.org/3/X0490E/x0490e0e.htm#TopOfPage
-				"PTstressfactor.cropCoefficient" 	1.0  //Table 12 https://www.fao.org/3/X0490E/x0490e0b.htm#TopOfPage
+				"PTstressfactor.depth"  		1.5 			//Table 22 Profondità ottenuta dalla FAO
+				"PTstressfactor.depletionFraction" 	0.5   //FAO Table 22 - http://www.fao.org/3/X0490E/x0490e0e.htm#TopOfPage
+				"PTstressfactor.cropCoefficient" 	0.75  //Table 12 https://www.fao.org/3/X0490E/x0490e0b.htm#TopOfPage
 				//che dipende dal tipo di vegetazione - in genere Kend
 				// conifer trees
        
@@ -101,7 +101,7 @@ OMS3.sim {
 				"readerAtmosphericPressure.tTimestep"           "${timestep}"
 				"readerAtmosphericPressure.fileNovalue"         "-9999.0"  
 				
-				"readerSoilMoisture.file"         				"${home}/data/${site}/${ID}/SoilMoisture18.csv" 
+				"readerSoilMoisture.file"         				"${home}/data/${site}/${ID}/SMcon.csv" 
 				"readerSoilMoisture.idfield"      				"ID"  
 				"readerSoilMoisture.tStart"       				"${startDate}"
 				"readerSoilMoisture.tEnd"         				"${endDate}"

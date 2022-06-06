@@ -72,10 +72,10 @@ OMS3.sim {
 				"PMstressfactor.useWaterStress" true 
 				     	
 				"PMstressfactor.waterWiltingPoint"	0.15   //FAO Table 19 - http://www.fao.org/3/X0490E/x0490e0c.htm#TopOfPage
-				"PMstressfactor.waterFieldCapacity"	0.23
-				"PMstressfactor.depth"  		1.00
-				"PMstressfactor.depletionFraction" 	0.75   //FAO Table 22 - http://www.fao.org/3/X0490E/x0490e0e.htm#TopOfPage
-				"PMstressfactor.cropCoefficient" 	0.85 
+				"PMstressfactor.waterFieldCapacity"	0.29
+				"PMstressfactor.depth"  		1.5
+				"PMstressfactor.depletionFraction" 	0.50   //FAO Table 22 - http://www.fao.org/3/X0490E/x0490e0e.htm#TopOfPage
+				"PMstressfactor.cropCoefficient" 	0.75 
 								
 				//	READERS				
 				"readerAirTemperature.file"         			"${home}/data/${basin}/${ID}/airT_${ID}.csv"

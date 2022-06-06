@@ -9,7 +9,7 @@ def home = oms_prj
 
 
 
-def richardsGridFileName = "$oms_prj//data/Grid_NetCDF/ex03_grid_dry.nc"
+def richardsGridFileName = "$oms_prj//data/Grid_NetCDF/Runoff_dry.nc"
 
 def typeClosureEquation = "{Water Depth,Van Genuchten}"
 /* come SWRC: theta in funzione di psi; estesa al caso saturo; 
@@ -50,7 +50,7 @@ def bottomBCFileName = "$oms_prj//data/Timeseries/ex03_dirichlet_dry.csv"
 
 def saveDatesFileName = "$oms_prj//data/Timeseries/ex03_save_dates.csv"
 
-def outputFileName = "$oms_prj//output/ex03_dry.nc"
+def outputFileName = "$oms_prj//output/Runoff_dry.nc"
 
 
 def writeFrequency = 10000

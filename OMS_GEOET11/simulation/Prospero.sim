@@ -7,7 +7,7 @@ def endDate		= "2015-12-16 00:00"
 def basin 		= "Cavone"
 def ID			= 1
 def timestep 	= 60
-def lab         = "totalstress" // potential  -  totalstress  -  environmentalstress  -  waterstress
+def lab         = "potential" // potential  -  totalstress  -  environmentalstress  -  waterstress
 
 OMS3.sim {
      resource "$oms_prj/lib"
@@ -60,7 +60,7 @@ OMS3.sim {
 				"input.centroidElevation"	"Elevation"
 
 				// PARAMETERS
-				"prospero.canopyHeight"			6.00
+				"prospero.canopyHeight"			10.00
 				"prospero.typeOfCanopy" 		"multilayer" //non si cambia
 		        
 		        "output.doFullPrint"			true
@@ -68,25 +68,25 @@ OMS3.sim {
 				"input.temporalStep"			"${timestep}"
 				
 				//Parameters for the Radiation Stress
-				"stressfactor.useRadiationStress" true
+				"stressfactor.useRadiationStress" false
 				  
 				"stressfactor.alpha" 		0.005
 				"stressfactor.theta" 		0.9
 				
 				//Parameter for the Vapour Pressure Deficit Stress
-				"stressfactor.useVDPStress" true
+				"stressfactor.useVDPStress" false
 				
 				"stressfactor.VPD0" 	5.0 
 				
 				//Parameters for the Temperature Stress
-				"stressfactor.useTemperatureStress" true    
+				"stressfactor.useTemperatureStress" false    
 				   	
 				"stressfactor.Tl" 		"-5.0"	//temperatura minima
 				"stressfactor.T0" 		20.0		//max
 				"stressfactor.Th" 		45.0 	//ottimale
 				
 				//Parameters for the Water Stress - es. melo
-				"stressfactor.useWaterStress" true 
+				"stressfactor.useWaterStress" false 
 				     	
 				"stressfactor.waterWiltingPoint"	0.15   //FAO Table 19 - http://www.fao.org/3/X0490E/x0490e0c.htm#TopOfPage
 				"stressfactor.waterFieldCapacity"	0.29
@@ -159,7 +159,7 @@ OMS3.sim {
                 "readerSoilHeatFlux.tTimestep"                  "${timestep}"
                 "readerSoilHeatFlux.fileNovalue"                "-9999.0"
                 
-                "readerLeafAreaIndex.file"         				"${home}/data/${basin}/${ID}/LAIsinMelo.csv" 	//DA MODIFICARE - a seconda del LAI come varia ET
+                "readerLeafAreaIndex.file"         				"${home}/data/${basin}/${ID}/LAI_all1.csv" 	//DA MODIFICARE - a seconda del LAI come varia ET
 				"readerLeafAreaIndex.idfield"      				"ID"  
 				"readerLeafAreaIndex.tStart"       				"${startDate}"
 				"readerLeafAreaIndex.tEnd"         				"${endDate}"
@@ -174,56 +174,56 @@ OMS3.sim {
                 "readerSoilMoisture.fileNovalue"                "-9999.0"																				
 	
                 //	WRITERS				              
-				"writerLatentHeat.file"        				"${home}/output/${basin}/${ID}/Melo_LH_Sun_${ID}_${lab}.csv" 
+				"writerLatentHeat.file"        				"${home}/output/${basin}/${ID}/LH_Sun_${ID}_${lab}.csv" 
 				"writerLatentHeat.tStart"       			"${startDate}"
 				"writerLatentHeat.tTimestep"   				"${timestep}"
 					
-				"writerLatentHeatShade.file"        		"${home}/output/${basin}/${ID}/Melo_LH_Shade_${ID}_${lab}.csv" 
+				"writerLatentHeatShade.file"        		"${home}/output/${basin}/${ID}/LH_Shade_${ID}_${lab}.csv" 
 				"writerLatentHeatShade.tStart"       		"${startDate}"
 				"writerLatentHeatShade.tTimestep"   		"${timestep}"
 
-				"writerTranspiration.file"        			"${home}/output/${basin}/${ID}/Melo_Transpiration_${ID}_${lab}.csv" 
+				"writerTranspiration.file"        			"${home}/output/${basin}/${ID}/Transpiration_${ID}_${lab}.csv" 
 				"writerTranspiration.tStart"       			"${startDate}"
 				"writerTranspiration.tTimestep"   			"${timestep}"
 				
-				"writerFluxTranspiration.file"        		"${home}/output/${basin}/${ID}/Melo_FluxTranspiration_${ID}_${lab}.csv" 
+				"writerFluxTranspiration.file"        		"${home}/output/${basin}/${ID}/FluxTranspiration_${ID}_${lab}.csv" 
 				"writerFluxTranspiration.tStart"       		"${startDate}"
 				"writerFluxTranspiration.tTimestep"			"${timestep}"
 				   					        					        					        					        	
 			      					        					        					        					        	      					        					        					        					        	      					        					        					        					        	
-				"writerLeafTemperature.file"				"${home}/output/${basin}/${ID}/Melo_LT_Sun_${ID}_${lab}.csv" 
+				"writerLeafTemperature.file"				"${home}/output/${basin}/${ID}/LT_Sun_${ID}_${lab}.csv" 
 				"writerLeafTemperature.tStart"				"${startDate}"
 				"writerLeafTemperature.tTimestep"			"${timestep}"       
 					
-				"writerLeafTemperatureShade.file"			"${home}/output/${basin}/${ID}/Melo_LT_Shade_${ID}_${lab}.csv" 
+				"writerLeafTemperatureShade.file"			"${home}/output/${basin}/${ID}/LT_Shade_${ID}_${lab}.csv" 
 				"writerLeafTemperatureShade.tStart"			"${startDate}"
 				"writerLeafTemperatureShade.tTimestep"		"${timestep}"       
 					
-				"writerRadiation.file"						"${home}/output/${basin}/${ID}/Melo_RadiationCanopySun_${ID}_${lab}.csv" 
+				"writerRadiation.file"						"${home}/output/${basin}/${ID}/RadiationCanopySun_${ID}_${lab}.csv" 
 				"writerRadiation.tStart"					"${startDate}"
 				"writerRadiation.tTimestep"					"${timestep}"       
 					
-				"writerRadiationShade.file"					"${home}/output/${basin}/${ID}/Melo_RadiationCanopyShade_${ID}_${lab}.csv" 
+				"writerRadiationShade.file"					"${home}/output/${basin}/${ID}/RadiationCanopyShade_${ID}_${lab}.csv" 
 				"writerRadiationShade.tStart"				"${startDate}"
 				"writerRadiationShade.tTimestep"			"${timestep}"       
 				
-				"writerRadiationSoil.file"					"${home}/output/${basin}/${ID}/Melo_RadiationSoil_${ID}_${lab}.csv" 
+				"writerRadiationSoil.file"					"${home}/output/${basin}/${ID}/RadiationSoil_${ID}_${lab}.csv" 
 				"writerRadiationSoil.tStart"				"${startDate}"
 				"writerRadiationSoil.tTimestep"				"${timestep}"       
 					
-				"writerCanopy.file"							"${home}/output/${basin}/${ID}/Melo_canopy_${ID}_${lab}.csv" 
+				"writerCanopy.file"							"${home}/output/${basin}/${ID}/canopy_${ID}_${lab}.csv" 
 				"writerCanopy.tStart"						"${startDate}"
 				"writerCanopy.tTimestep"					"${timestep}"       
 					
-				"writerSensibleHeat.file"					"${home}/output/${basin}/${ID}/Melo_SH_Sun_${ID}_${lab}.csv" 
+				"writerSensibleHeat.file"					"${home}/output/${basin}/${ID}/SH_Sun_${ID}_${lab}.csv" 
 				"writerSensibleHeat.tStart"					"${startDate}"
 				"writerSensibleHeat.tTimestep"				"${timestep}"       
 				
-				"writerSensibleHeatShade.file"				"${home}/output/${basin}/${ID}/Melo_SH_Shade_${ID}_${lab}.csv" 
+				"writerSensibleHeatShade.file"				"${home}/output/${basin}/${ID}/SH_Shade_${ID}_${lab}.csv" 
 				"writerSensibleHeatShade.tStart"			"${startDate}"
 				"writerSensibleHeatShade.tTimestep"			"${timestep}" 
 				
-				"writerVPD.file"							"${home}/output/${basin}/${ID}/Melo_VPD_${ID}_${lab}.csv" 
+				"writerVPD.file"							"${home}/output/${basin}/${ID}/VPD_${ID}_${lab}.csv" 
 				"writerVPD.tStart"							"${startDate}"
 				"writerVPD.tTimestep"						"${timestep}"
 				
